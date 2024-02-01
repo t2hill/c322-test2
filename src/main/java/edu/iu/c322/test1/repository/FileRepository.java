@@ -18,6 +18,7 @@ public class FileRepository {
     private String IMAGES_FOLDER_PATH = "quizzes/questions/images/";
     private static final String NEW_LINE = System.lineSeparator();
     private static final String QUESTION_DATABASE_NAME = "questions.txt";
+
     private static void appendToFile(Path path, String content)
             throws IOException {
         Files.write(path,
@@ -25,6 +26,7 @@ public class FileRepository {
                 StandardOpenOption.CREATE,
                 StandardOpenOption.APPEND);
     }
+
     public boolean add(Question question) throws IOException {
         Path path = Paths.get(QUESTION_DATABASE_NAME);
         String data = question.toLine();
@@ -35,10 +37,12 @@ public class FileRepository {
     public List<Question> findAll() throws IOException {
         List<Question> result = new ArrayList<>();
         Path path = Paths.get(QUESTION_DATABASE_NAME);
-        List<String> data = Files.readAllLines(path);
-        for (String line : data) {
-            Question q = Question.fromLine(line);
-            result.add(q);
+        if (Files.exists(path)) {
+            List<String> data = Files.readAllLines(path);
+            for (String line : data) {
+                Question q = Question.fromLine(line);
+                result.add(q);
+            }
         }
         return result;
     }
@@ -46,7 +50,7 @@ public class FileRepository {
     public List<Question> find(String answer) throws IOException {
         List<Question> animals = findAll();
         List<Question> result = new ArrayList<>();
-        for(Question question : animals) {
+        for (Question question : animals) {
             if (answer != null && !question.getAnswer().trim().equalsIgnoreCase(answer.trim())) {
                 continue;
             }
@@ -57,7 +61,7 @@ public class FileRepository {
 
     public Question get(Integer id) throws IOException {
         List<Question> animals = findAll();
-        for(Question question : animals) {
+        for (Question question : animals) {
             if (question.getId() == id) {
                 return question;
             }
