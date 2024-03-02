@@ -30,12 +30,8 @@ public class FileRepository {
     public boolean add(Question question) throws IOException {
         Path path = Paths.get(QUESTION_DATABASE_NAME);
         String data = question.toLine();
-        if (get(question.getId()) == null) {
-            appendToFile(path, data + NEW_LINE);
-            return true;
-        }
-        System.out.println("This question is already in the database or the id is already used.");
-        return false;
+        appendToFile(path, data + NEW_LINE);
+        return true;
     }
 
     public List<Question> findAll() throws IOException {
